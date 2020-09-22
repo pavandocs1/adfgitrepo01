@@ -1,0 +1,35 @@
+{
+	"name": "ProductMaster_Load",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ProductMaster",
+						"type": "DatasetReference"
+					},
+					"name": "BlobProductMaster"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Retail_ProductMaster",
+						"type": "DatasetReference"
+					},
+					"name": "RetailProductMaster"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "DERIVEDCOLUMNS"
+				}
+			],
+			"script": "source(output(\n\t\tBUSINESS as string,\n\t\tBUSINESS_DESCRIPTION as string,\n\t\tCATEGORY_CODE as string,\n\t\tCATEGORY_DESCRIPTION as string,\n\t\tSUB_CATEGORY_CODE as string,\n\t\tSUB_CATEGORY_DESCRIPTION as string,\n\t\tHIERARCHY_SEGMENT_CODE as string,\n\t\tHIERARCHY_SEGMENT_DESCRIPTION as string,\n\t\tRANGE_BRAND as string,\n\t\tRANGE_BRAND_DESCRIPTION as string,\n\t\tBRAND_DENOMINATION as string,\n\t\tBRAND_DENOMINATION_DESC as string,\n\t\tEAN_UPC as string,\n\t\tMATERIAL as string,\n\t\tSAP_MATERIAL_DESC_EN as string,\n\t\tKWIKEE_MATERIAL_DESC_EN as string,\n\t\tKWIKEE_MATERIAL_DESC_FR as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'table') ~> BlobProductMaster\nBlobProductMaster alterRow(upsertIf(true())) ~> AlterRow1\nAlterRow1 derive(LOAD_DATE = currentDate(),\n\t\tUPDATE_DATE = currentDate(),\n\t\tDATA_SOURCE = 'RETAIL') ~> DERIVEDCOLUMNS\nDERIVEDCOLUMNS sink(input(\n\t\tBUSINESS as string,\n\t\tBUSINESS_DESCRIPTION as string,\n\t\tCATEGORY_CODE as string,\n\t\tCATEGORY_DESCRIPTION as string,\n\t\tSUB_CATEGORY_CODE as string,\n\t\tSUB_CATEGORY_DESCRIPTION as string,\n\t\tHIERARCHY_SEGMENT_CODE as string,\n\t\tHIERARCHY_SEGMENT_DESCRIPTION as string,\n\t\tRANGE_BRAND as string,\n\t\tRANGE_BRAND_DESCRIPTION as string,\n\t\tBRAND_DENOMINATION as string,\n\t\tBRAND_DENOMINATION_DESC as string,\n\t\tEAN_UPC as string,\n\t\tMATERIAL as string,\n\t\tSAP_MATERIAL_DESC_EN as string,\n\t\tKWIKEE_MATERIAL_DESC_EN as string,\n\t\tKWIKEE_MATERIAL_DESC_FR as string,\n\t\tLOAD_DATE as timestamp,\n\t\tUPDATE_DATE as timestamp,\n\t\tDATA_SOURCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['EAN_UPC'],\n\tformat: 'table',\n\tmapColumn(\n\t\tBUSINESS,\n\t\tBUSINESS_DESCRIPTION,\n\t\tCATEGORY_CODE,\n\t\tCATEGORY_DESCRIPTION,\n\t\tSUB_CATEGORY_CODE,\n\t\tSUB_CATEGORY_DESCRIPTION,\n\t\tHIERARCHY_SEGMENT_CODE,\n\t\tHIERARCHY_SEGMENT_DESCRIPTION,\n\t\tRANGE_BRAND,\n\t\tRANGE_BRAND_DESCRIPTION,\n\t\tBRAND_DENOMINATION,\n\t\tBRAND_DENOMINATION_DESC,\n\t\tEAN_UPC,\n\t\tMATERIAL,\n\t\tSAP_MATERIAL_DESC_EN,\n\t\tKWIKEE_MATERIAL_DESC_EN,\n\t\tKWIKEE_MATERIAL_DESC_FR,\n\t\tUPDATE_DATE,\n\t\tLOAD_DATE,\n\t\tDATA_SOURCE\n\t),\n\tskipDuplicateMapInputs: true) ~> RetailProductMaster"
+		}
+	}
+}

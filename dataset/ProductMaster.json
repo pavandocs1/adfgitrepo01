@@ -1,0 +1,103 @@
+{
+	"name": "ProductMaster",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_Stage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeTable",
+		"schema": [
+			{
+				"name": "BUSINESS",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "BUSINESS_DESCRIPTION",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "CATEGORY_CODE",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "CATEGORY_DESCRIPTION",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "SUB_CATEGORY_CODE",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "SUB_CATEGORY_DESCRIPTION",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "HIERARCHY_SEGMENT_CODE",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "HIERARCHY_SEGMENT_DESCRIPTION",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "RANGE_BRAND",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "RANGE_BRAND_DESCRIPTION",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "BRAND_DENOMINATION",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "BRAND_DENOMINATION_DESC",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "EAN_UPC",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "MATERIAL",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "SAP_MATERIAL_DESC_EN",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "KWIKEE_MATERIAL_DESC_EN",
+				"type": "VARCHAR",
+				"scale": 0
+			},
+			{
+				"name": "KWIKEE_MATERIAL_DESC_FR",
+				"type": "VARCHAR",
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "AZURESTAGE",
+			"table": "PRODUCTMASTER_STAGE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
