@@ -1,0 +1,24 @@
+{
+	"name": "StoreMaster_Load",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "POSSourceStage",
+						"type": "DatasetReference"
+					},
+					"name": "BlobPOSSource"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tFREQ as string,\n\t\tRETAILER as string,\n\t\tDATE_ID as string,\n\t\tEA_UPC as string,\n\t\tK_DESC_E as string,\n\t\tK_DESC_F as string,\n\t\tBRAND as string,\n\t\tBRAND_DESC as string,\n\t\tBRAND_FUNC as string,\n\t\tUN_STORE as string,\n\t\tSTORE_ID as string,\n\t\tADDRESS as string,\n\t\tCITY as string,\n\t\tPROVINCE as string,\n\t\tPOSTAL_CODE as string,\n\t\tSCAN_QTY as string,\n\t\tDOLLARS_SOLD as string,\n\t\tBANNER_NAME as string,\n\t\tLOAD_DATE as timestamp,\n\t\tUPDATE_DATE as timestamp,\n\t\tDATA_SOURCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'table') ~> BlobPOSSource\nBlobPOSSource split(DATE_ID>0,\n\tDATE_ID>1,\n\tdisjoint: true) ~> ConditionalSplit1@(POSLoad, StoreLoad, Other)"
+		}
+	}
+}
