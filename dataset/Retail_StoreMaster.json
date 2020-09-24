@@ -1,0 +1,71 @@
+{
+	"name": "Retail_StoreMaster",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_POSDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeTable",
+		"schema": [
+			{
+				"name": "STORE_ID",
+				"type": "VARCHAR",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "BANNER_NAME",
+				"type": "VARCHAR",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "ADDRESS",
+				"type": "VARCHAR",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "CITY",
+				"type": "VARCHAR",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "PROVINCE",
+				"type": "VARCHAR",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "POSTAL_CODE",
+				"type": "VARCHAR",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "LOAD_DATE",
+				"type": "TIMESTAMP_NTZ",
+				"precision": 29,
+				"scale": 9
+			},
+			{
+				"name": "UPDATE_DATE",
+				"type": "TIMESTAMP_NTZ",
+				"precision": 29,
+				"scale": 9
+			},
+			{
+				"name": "DATA_SOURCE",
+				"type": "VARCHAR",
+				"precision": 8,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "POS",
+			"table": "RETAILER_STOREMASTER_D"
+		}
+	}
+}
