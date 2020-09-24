@@ -1,5 +1,5 @@
 {
-	"name": "StoreMaster_Load",
+	"name": "POS_SalesAndStoreMaster_Load",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
