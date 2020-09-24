@@ -19,14 +19,23 @@
 						"type": "DatasetReference"
 					},
 					"name": "RetailPOSSales"
+				},
+				{
+					"name": "StoreMaster"
 				}
 			],
 			"transformations": [
 				{
 					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "Distinct"
+				},
+				{
+					"name": "AlterRow1"
 				}
 			],
-			"script": "source(output(\n\t\tFREQ as string,\n\t\tRETAILER as string,\n\t\tDATE_ID as string,\n\t\tEA_UPC as string,\n\t\tK_DESC_E as string,\n\t\tK_DESC_F as string,\n\t\tBRAND as string,\n\t\tBRAND_DESC as string,\n\t\tBRAND_FUNC as string,\n\t\tUN_STORE as string,\n\t\tSTORE_ID as string,\n\t\tADDRESS as string,\n\t\tCITY as string,\n\t\tPROVINCE as string,\n\t\tPOSTAL_CODE as string,\n\t\tSCAN_QTY as string,\n\t\tDOLLARS_SOLD as string,\n\t\tBANNER_NAME as string,\n\t\tLOAD_DATE as timestamp,\n\t\tUPDATE_DATE as timestamp,\n\t\tDATA_SOURCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'table') ~> BlobPOSSource\nBlobPOSSource split(DATE_ID>0,\n\tDATE_ID>1,\n\tdisjoint: true) ~> ConditionalSplit1@(POSLoad, StoreLoad, Other)\nConditionalSplit1@POSLoad sink(input(\n\t\tRETAILER as string,\n\t\tDATE_ID as decimal(38,0),\n\t\tEA_UPC as string,\n\t\tSTORE_ID as string,\n\t\tSCAN_QTY as decimal(38,0),\n\t\tDOLLARS_SOLD as decimal(38,0),\n\t\tLOAD_DATE as timestamp,\n\t\tDATA_SOURCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tRETAILER,\n\t\tDATE_ID,\n\t\tEA_UPC,\n\t\tSTORE_ID,\n\t\tSCAN_QTY,\n\t\tDOLLARS_SOLD,\n\t\tLOAD_DATE,\n\t\tDATA_SOURCE\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RetailPOSSales"
+			"script": "source(output(\n\t\tFREQ as string,\n\t\tRETAILER as string,\n\t\tDATE_ID as string,\n\t\tEA_UPC as string,\n\t\tK_DESC_E as string,\n\t\tK_DESC_F as string,\n\t\tBRAND as string,\n\t\tBRAND_DESC as string,\n\t\tBRAND_FUNC as string,\n\t\tUN_STORE as string,\n\t\tSTORE_ID as string,\n\t\tADDRESS as string,\n\t\tCITY as string,\n\t\tPROVINCE as string,\n\t\tPOSTAL_CODE as string,\n\t\tSCAN_QTY as string,\n\t\tDOLLARS_SOLD as string,\n\t\tBANNER_NAME as string,\n\t\tLOAD_DATE as timestamp,\n\t\tUPDATE_DATE as timestamp,\n\t\tDATA_SOURCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'table') ~> BlobPOSSource\nBlobPOSSource split(DATE_ID>0,\n\tDATE_ID>1,\n\tdisjoint: true) ~> ConditionalSplit1@(POSLoad, StoreLoad, Other)\nConditionalSplit1@StoreLoad aggregate(groupBy(STORE_ID),\n\tBANNER_NAME = max(BANNER_NAME),\n\t\tADDRESS = max(ADDRESS),\n\t\tCITY = max(CITY),\n\t\tPROVINCE = max(PROVINCE),\n\t\tPOSTAL_CODE = max(POSTAL_CODE),\n\t\tLOAD_DATE = max(LOAD_DATE),\n\t\tUPDATE_DATE = max(UPDATE_DATE),\n\t\tDATA_SOURCE = max(DATA_SOURCE)) ~> Distinct\nDistinct alterRow(upsertIf(true())) ~> AlterRow1\nConditionalSplit1@POSLoad sink(input(\n\t\tRETAILER as string,\n\t\tDATE_ID as decimal(38,0),\n\t\tEA_UPC as string,\n\t\tSTORE_ID as string,\n\t\tSCAN_QTY as decimal(38,0),\n\t\tDOLLARS_SOLD as decimal(38,0),\n\t\tLOAD_DATE as timestamp,\n\t\tDATA_SOURCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tRETAILER,\n\t\tDATE_ID,\n\t\tEA_UPC,\n\t\tSTORE_ID,\n\t\tSCAN_QTY,\n\t\tDOLLARS_SOLD,\n\t\tLOAD_DATE,\n\t\tDATA_SOURCE\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RetailPOSSales\nAlterRow1 sink(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> StoreMaster"
 		}
 	}
 }
